@@ -20,6 +20,7 @@ float flattenA[N * N], flattenB[N * N];
 void initialize_inputs() {
     int row, col;
 
+    // FIXED RANDOM SEED = 22
     srand(22);
     for (row = 0; row < N; row++) {
         for (col = 0; col < N; col++) {
