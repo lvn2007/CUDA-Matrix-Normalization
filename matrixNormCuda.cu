@@ -13,7 +13,7 @@
 /* Matrices */
 volatile float A[N][N], B[N][N];
 
-// Flattened array A
+// Flattened array A & B
 float flattenA[N * N], flattenB[N * N];
 
 /* Initialize A and B*/
@@ -128,6 +128,7 @@ __global__ void gpuMatrixNorm(float *flattenA, float *flattenB, int arraySize) {
         __syncthreads();
         sigma = sqrt(sigma);
 
+        // Normalization calculation
         for (int row = 0; row < arraySize; row++) {
             if (sigma == 0.0) {
                 flattenB[row * arraySize + idx] = 0.0;
@@ -163,6 +164,7 @@ int main(int argc, char **argv) {
 
     // Sanity check after flattening
     //  Usually commented this out ... I only un-conmment it to validate the flattening process went ok
+    //  NOTE: This will only print out if N < 10
     checkFlatten(flattenA);
 
     // After flattening, size of array flattenA will be N * N
@@ -174,6 +176,7 @@ int main(int argc, char **argv) {
     cudaRuntimeGetVersion(&cudaRunTimeVersion);
     cudaDriverGetVersion(&cudaDriverVersion);
 
+    // Printing out CUDA runtime & driver version to console
     printf("Cuda Runtime Version: %i\n", cudaRunTimeVersion);
     printf("Cuda Driver Version: %i\n", cudaDriverVersion);
 
@@ -210,6 +213,7 @@ int main(int argc, char **argv) {
 
     // Sanity check the result after computes by GPU and deliver back to host machine
     //  Usually commented this out ... I only un-comment it to validate the computed result went ok
+    //  NOTE: This will only print out if N < 10
     checkFlatten(flattenB);
 
     // Freeing memory in GPU device
